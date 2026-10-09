@@ -1294,27 +1294,36 @@
             renderStudentSharedRoutes();
         };
         function usarMinhaLocalizacao() {
-    const campoOrigem = document.getElementById('origin-input') || document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
-    
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const lat = position.coords.latitude.toFixed(4);
-          const lon = position.coords.longitude.toFixed(4);
-          
-          if (campoOrigem) {
-            campoOrigem.value = `Minha Localização (${lat}, ${lon})`;
-            alert('Localização obtida com sucesso!');
-          }
-        },
-        (error) => {
-          alert('Não foi possível obter sua localização. Verifique se o GPS está ativado.');
+  const campoOrigem = document.getElementById('origin-input') || document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
+  
+  if (navigator.geolocation) {
+    // Opções para forçar o GPS de alta precisão do dispositivo
+    const options = {
+      enableHighAccuracy: true, // Força o uso do GPS do chip/dispositivo (muito mais preciso)
+      timeout: 10000,           // Aguarda até 10 segundos pela melhor leitura
+      maximumAge: 0             // Não usa localização antiga em cache
+    };
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        // Mantém mais casas decimais para manter a precisão exata do ponto
+        const lat = position.coords.latitude;
+        const lon = position.coords.longitude;
+        
+        if (campoOrigem) {
+          campoOrigem.value = `Minha Localização (${lat.toFixed(6)}, ${lon.toFixed(6)})`;
+          alert('Localização exata obtida com sucesso!');
         }
-      );
-    } else {
-      alert('Geolocalização não é suportada neste navegador.');
-    }
+      },
+      (error) => {
+        alert('Não foi possível obter sua localização exata. Verifique se a permissão de localização/GPS está ativada no seu navegador e dispositivo.');
+      },
+      options
+    );
+  } else {
+    alert('Geolocalização não é suportada neste navegador.');
   }
+}
  </script> 
 </body>
 </html> 
