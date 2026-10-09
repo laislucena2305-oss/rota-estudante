@@ -1290,6 +1290,27 @@
             renderSearchRoutes();
             renderStudentSharedRoutes();
         };
-    </script>
+    </script> function usarMinhaLocalizacao() {
+  const campoOrigem = document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
+  
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const lat = position.coords.latitude.toFixed(4);
+        const lon = position.coords.longitude.toFixed(4);
+        
+        if (campoOrigem) {
+          campoOrigem.value = `Minha Localização (${lat}, ${lon})`;
+          alert('Localização obtida com sucesso!');
+        }
+      },
+      (error) => {
+        alert('Não foi possível obter sua localização. Verifique se o GPS está ativado.');
+      }
+    );
+  } else {
+    alert('Geolocalização não é suportada neste navegador.');
+  }
+}
 </body>
-</html>
+</html> <button type="button" onclick="usarMinhaLocalizacao()">📍 Usar meu GPS</button>
