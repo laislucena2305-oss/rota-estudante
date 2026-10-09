@@ -216,6 +216,9 @@
                                         aria-label="Local de origem">
                                     <i class="fa-solid fa-location-crosshairs absolute left-4 top-1/2 -translate-y-1/2 text-pastelPink-600 text-lg"></i>
                                 </div>
+                                <button type="button" onclick="usarMinhaLocalizacao()" class="mt-2 text-xs font-bold bg-pastelYellow-300 hover:bg-pastelYellow-400 text-pastelYellow-950 px-3 py-1.5 rounded-xl transition-all border border-pastelYellow-400 flex items-center gap-1.5 shadow-sm">
+        <i class="fa-solid fa-location-arrow"></i> Usar meu GPS
+    </button>
                             </div>
 
                             <!-- Destination Field -->
@@ -1290,7 +1293,7 @@
             renderSearchRoutes();
             renderStudentSharedRoutes();
         };
-    </script> function usarMinhaLocalizacao() {
+ function usarMinhaLocalizacao() {
   const campoOrigem = document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
   
   if (navigator.geolocation) {
@@ -1311,6 +1314,6 @@
   } else {
     alert('Geolocalização não é suportada neste navegador.');
   }
-}
+} </script> 
 </body>
-</html> <button type="button" onclick="usarMinhaLocalizacao()">📍 Usar meu GPS</button>
+</html> 
