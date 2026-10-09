@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rota Fácil | Encontre o melhor caminho para o seu destino</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        pastelPink: {
+                            50: '#fff5f7',
+                            100: '#ffe4e6',
+                            200: '#fecdd3',
+                            300: '#fda4af',
+                            400: '#fb7185',
+                            500: '#f43f5e',
+                            600: '#e11d48',
+                            700: '#be185d',
+                            800: '#9f1239',
+                            900: '#500724',
+                            950: '#2d0615',
+                        },
+                        pastelYellow: {
+                            50: '#fefce8',
+                            100: '#fef9c3',
+                            200: '#fef08a',
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
+                            800: '#854d0e',
+                            900: '#422006',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .high-contrast {
+            filter: contrast(150%);
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+        .high-contrast * {
+            border-color: #ffffff !important;
+        }
+        .high-contrast .bg-white, 
+        .high-contrast .bg-pastelPink-50, 
+        .high-contrast .bg-pastelYellow-50,
+        .high-contrast .bg-pastelPink-100,
+        .high-contrast .bg-pastelYellow-100 {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+        }
+        .high-contrast button, .high-contrast a, .high-contrast input, .high-contrast select {
+            outline: 3px solid #ffff00 !important;
+        }
+        
+        *:focus-visible {
+            outline: 3px solid #be185d !important;
+            outline-offset: 2px;
+        }
+
+        .pastel-card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(251, 113, 133, 0.12), 0 8px 10px -6px rgba(250, 204, 21, 0.15);
+        }
+        .pastel-glow-lg {
+            box-shadow: 0 20px 30px -10px rgba(244, 63, 94, 0.18), 0 10px 15px -5px rgba(234, 179, 8, 0.2);
+        }
+    </style>
+</head>
+<body class="bg-[#fffdfa] text-slate-900 font-sans antialiased min-h-screen flex flex-col transition-colors duration-200" id="app-body">
+
+    <!-- Accessibility Control Bar -->
+    <header class="bg-pastelPink-950 text-white text-xs sm:text-sm py-2 px-4 border-b border-pastelPink-900" aria-label="Acessibilidade e Recursos">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center gap-2">
+                <span class="bg-pastelYellow-300 text-pastelYellow-950 font-extrabold px-2.5 py-0.5 rounded-full text-xs uppercase tracking-wider">
+                    🌱 Projeto de Vida Independente
+                </span>
+                <span class="hidden md:inline text-pastelPink-200 font-medium">Solução colaborativa de mobilidade urbana</span>
+            </div>
+            
+            <div class="flex items-center space-x-2 sm:space-x-3 ml-auto">
+                <!-- Text Resizing -->
+                <div class="flex items-center space-x-1 bg-pastelPink-900/90 rounded-lg px-2 py-1 border border-pastelPink-800">
+                    <span class="text-xs text-pastelPink-200 mr-1 hidden sm:inline">Fonte:</span>
+                    <button onclick="changeFontSize(-1)" class="w-6 h-6 rounded bg-pastelPink-800 hover:bg-pastelPink-700 text-white flex items-center justify-center font-bold" aria-label="Diminuir tamanho da fonte">A-</button>
+                    <button onclick="resetFontSize()" class="px-1.5 text-xs text-pastelYellow-300 font-bold hover:underline" aria-label="Tamanho padrão">Normal</button>
+                    <button onclick="changeFontSize(1)" class="w-6 h-6 rounded bg-pastelPink-800 hover:bg-pastelPink-700 text-white flex items-center justify-center font-bold" aria-label="Aumentar tamanho da fonte">A+</button>
+                </div>
+
+                <!-- High Contrast Toggle -->
+                <button onclick="toggleHighContrast()" class="flex items-center gap-1.5 bg-pastelPink-900 hover:bg-pastelPink-800 px-3 py-1 rounded-lg text-xs text-pastelYellow-200 border border-pastelYellow-300/40 font-bold transition-all" aria-label="Alternar Alto Contraste">
+                    <i class="fa-solid fa-circle-half-stroke text-pastelYellow-300"></i>
+                    <span class="hidden sm:inline">Alto Contraste</span>
+                </button>
+
+                <!-- Audio Reader -->
+                <button onclick="readPageSummary()" class="flex items-center gap-1.5 bg-pastelPink-900 hover:bg-pastelPink-800 px-3 py-1 rounded-lg text-xs text-pastelPink-100 border border-pastelPink-400/30 font-bold transition-all" aria-label="Ouvir Resumo da Página">
+                    <i class="fa-solid fa-volume-high text-pastelYellow-300"></i>
+                    <span class="hidden sm:inline">Ouvir Página</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white/95 backdrop-blur-md border-b border-pastelPink-200 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                
+                <!-- Logo & Name -->
+                <a href="#hero" class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-pastelPink-500 rounded-2xl p-1">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-pastelPink-400 via-pastelPink-500 to-pastelYellow-300 rounded-2xl flex items-center justify-center text-pastelPink-950 shadow-md shadow-pastelPink-300/50 group-hover:scale-105 transition-transform border border-pastelPink-300">
+                        <i class="fa-solid fa-diamond-turn-right text-2xl text-pastelPink-950"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1">
+                            <span class="text-2xl sm:text-3xl font-black text-pastelPink-950 tracking-tight">Rota</span>
+                            <span class="text-2xl sm:text-3xl font-black text-pastelYellow-800 bg-pastelYellow-200 px-2 py-0.5 rounded-xl border border-pastelYellow-300">Fácil</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 font-bold hidden sm:block">Mobilidade urbana inteligente & independente</p>
+                    </div>
+                </a>
+
+                <!-- Desktop Nav Links -->
+                <div class="hidden lg:flex items-center space-x-1 font-bold text-slate-800 text-sm">
+                    <a href="#hero" class="px-3 py-2 rounded-xl hover:bg-pastelPink-100 hover:text-pastelPink-800 transition-colors">Buscar Rota</a>
+                    <a href="#minha-rota" class="px-3 py-2 rounded-xl hover:bg-pastelYellow-100 hover:text-pastelYellow-900 transition-colors flex items-center gap-1.5 text-pastelYellow-900 bg-pastelYellow-50 border border-pastelYellow-200">
+                        <i class="fa-solid fa-graduation-cap text-pastelYellow-700"></i> Minha Rota Escolar
+                    </a>
+                    <a href="#rotas-compartilhadas" class="px-3 py-2 rounded-xl hover:bg-pastelPink-100 hover:text-pastelPink-800 transition-colors">Rotas Compartilhadas</a>
+                    <a href="#economize" class="px-3 py-2 rounded-xl hover:bg-pastelYellow-100 hover:text-pastelYellow-900 transition-colors">Economize</a>
+                    <a href="#dicas" class="px-3 py-2 rounded-xl hover:bg-pastelPink-100 hover:text-pastelPink-800 transition-colors">Dicas</a>
+                    <a href="#sobre" class="px-3 py-2 rounded-xl hover:bg-pastelPink-100 hover:text-pastelPink-800 transition-colors">Sobre</a>
+                </div>
+
+                <!-- CTA Button & Mobile Menu Toggle -->
+                <div class="flex items-center gap-2">
+                    <a href="#minha-rota" class="bg-gradient-to-r from-pastelPink-600 to-pastelPink-500 hover:from-pastelPink-700 hover:to-pastelPink-600 text-white font-extrabold px-4 py-2.5 rounded-2xl shadow-md hover:shadow-lg transition-all text-xs sm:text-sm flex items-center gap-2 border border-pastelPink-300">
+                        <i class="fa-solid fa-plus-circle text-pastelYellow-300"></i>
+                        <span>Cadastrar Rota</span>
+                    </a>
+                    <button onclick="toggleMobileMenu()" class="lg:hidden p-2.5 rounded-xl text-slate-800 hover:bg-pastelPink-100 focus:outline-none" aria-label="Abrir Menu">
+                        <i class="fa-solid fa-bars text-xl text-pastelPink-950" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden lg:hidden border-t border-pastelPink-200 bg-white px-4 pt-3 pb-5 space-y-2 shadow-lg">
+            <a href="#hero" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-pastelPink-100">Buscar Rota</a>
+            <a href="#minha-rota" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-pastelYellow-900 bg-pastelYellow-100 border border-pastelYellow-300">Minha Rota para a Escola</a>
+            <a href="#rotas-compartilhadas" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-pastelPink-100">Rotas Compartilhadas</a>
+            <a href="#economize" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-pastelYellow-100">Economize na Rota</a>
+            <a href="#dicas" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-pastelPink-100">Dicas & Avaliações</a>
+            <a href="#sobre" onclick="toggleMobileMenu()" class="block px-3 py-2.5 rounded-xl font-bold text-slate-800 hover:bg-pastelPink-100">Sobre o Projeto</a>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section id="hero" class="relative bg-gradient-to-b from-pastelPink-100 via-pastelYellow-50/70 to-[#fffdfa] py-12 lg:py-16 overflow-hidden border-b border-pastelPink-200">
+            <!-- Subtle background elements -->
+            <div class="absolute -top-12 -left-12 w-80 h-80 bg-pastelPink-300/30 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute top-1/4 right-0 w-96 h-96 bg-pastelYellow-200/50 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center max-w-3xl mx-auto mb-8">
+                    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-pastelYellow-200 text-pastelYellow-950 text-xs sm:text-sm font-extrabold border border-pastelYellow-300 shadow-sm mb-4">
+                        <i class="fa-solid fa-map-location-dot text-pastelPink-600"></i> Mobilidade Urbana Descomplicada
+                    </span>
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-pastelPink-950 tracking-tight leading-tight mb-4">
+                        Encontre o <span class="bg-gradient-to-r from-pastelPink-600 to-pastelPink-500 bg-clip-text text-transparent underline decoration-pastelYellow-400 decoration-wavy decoration-2">melhor caminho</span> para o seu destino.
+                    </h1>
+                    <p class="text-base sm:text-lg text-slate-700 font-medium leading-relaxed max-w-2xl mx-auto">
+                        Pesquise e compare trajetos de ônibus, trem, metrô, bicicleta e caminhada. Escolha a opção mais barata, rápida e prática para o seu dia a dia.
+                    </p>
+                </div>
+
+                <!-- Main Search Form Card -->
+                <div class="bg-white/95 rounded-3xl pastel-glow-lg p-5 sm:p-8 text-slate-900 max-w-4xl mx-auto border-2 border-pastelPink-200">
+                    <form id="search-form" onsubmit="executeRouteSearch(event)" class="space-y-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            
+                            <!-- Origin Field -->
+                            <div>
+                                <label for="origin-input" class="block text-xs font-black uppercase tracking-wider text-slate-800 mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-circle-dot text-pastelPink-600"></i> De onde você está?
+                                </label>
+                                <div class="relative">
+                                    <input type="text" id="origin-input" required 
+                                        placeholder="Ex: Bairro Jardim, Terminal Central, Estação Leste" 
+                                        value="Bairro das Flores"
+                                        class="w-full pl-11 pr-4 py-4 rounded-2xl border-2 border-pastelPink-200 focus:border-pastelPink-500 focus:ring-4 focus:ring-pastelPink-200 text-slate-900 font-bold text-base bg-pastelPink-50/40 shadow-inner transition-all"
+                                        aria-label="Local de origem">
+                                    <i class="fa-solid fa-location-crosshairs absolute left-4 top-1/2 -translate-y-1/2 text-pastelPink-600 text-lg"></i>
+                                </div>
+                            </div>
+
+                            <!-- Destination Field -->
+                            <div>
+                                <label for="dest-input" class="block text-xs font-black uppercase tracking-wider text-slate-800 mb-2 flex items-center gap-2">
+                                    <i class="fa-solid fa-location-dot text-pastelYellow-700"></i> Para onde você vai?
+                                </label>
+                                <div class="relative">
+                                    <input type="text" id="dest-input" required 
+                                        placeholder="Ex: Escola Estadual, ETEC Central, Campus Universitário" 
+                                        value="Escola Técnica Estadual"
+                                        class="w-full pl-11 pr-4 py-4 rounded-2xl border-2 border-pastelYellow-300 focus:border-pastelYellow-500 focus:ring-4 focus:ring-pastelYellow-200 text-slate-900 font-bold text-base bg-pastelYellow-50/40 shadow-inner transition-all"
+                                        aria-label="Local de destino">
+                                    <i class="fa-solid fa-graduation-cap absolute left-4 top-1/2 -translate-y-1/2 text-pastelYellow-700 text-lg"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Transport Filter Checkboxes -->
+                        <div class="pt-2 border-t border-pastelPink-100 flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+                            <span class="font-black text-slate-800 flex items-center gap-1.5">
+                                <i class="fa-solid fa-sliders text-pastelPink-600"></i> Considerar transportes:
+                            </span>
+                            <div class="flex flex-wrap gap-2 font-bold">
+                                <label class="inline-flex items-center gap-1.5 bg-pastelPink-50 hover:bg-pastelPink-100 px-3 py-1.5 rounded-xl border border-pastelPink-200 cursor-pointer">
+                                    <input type="checkbox" id="mode-bus" checked class="w-4 h-4 text-pastelPink-600 rounded"> <span>🚌 Ônibus</span>
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 bg-pastelYellow-50 hover:bg-pastelYellow-100 px-3 py-1.5 rounded-xl border border-pastelYellow-300 cursor-pointer">
+                                    <input type="checkbox" id="mode-train" checked class="w-4 h-4 text-pastelYellow-600 rounded"> <span>🚆 Trem / Metrô</span>
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-xl border border-emerald-200 cursor-pointer text-emerald-950">
+                                    <input type="checkbox" id="mode-bike" checked class="w-4 h-4 text-emerald-600 rounded"> <span>🚲 Bike</span>
+                                </label>
+                                <label class="inline-flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl border border-slate-300 cursor-pointer text-slate-900">
+                                    <input type="checkbox" id="mode-walk" checked class="w-4 h-4 text-slate-700 rounded"> <span>🚶 Caminhada</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Search Button -->
+                        <div>
+                            <button type="submit" class="w-full bg-gradient-to-r from-pastelPink-600 via-pastelPink-500 to-pastelYellow-500 hover:from-pastelPink-700 hover:to-pastelYellow-600 text-white text-lg font-black py-4 px-6 rounded-2xl shadow-lg shadow-pastelPink-500/20 hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0 transition-all flex items-center justify-center gap-3 border border-pastelPink-300">
+                                <i class="fa-solid fa-magnifying-glass-location text-xl"></i>
+                                <span>Encontrar Rota</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Quick Preset Routes -->
+                    <div class="mt-5 pt-4 border-t border-pastelPink-100 flex flex-wrap items-center gap-2 text-xs">
+                        <span class="font-bold text-slate-700 flex items-center gap-1">
+                            <i class="fa-solid fa-bolt text-pastelYellow-600"></i>Testar trajetos simulados:
+                        </span>
+                        <button onclick="setPreset('Bairro das Flores', 'Escola Técnica Estadual')" class="bg-pastelPink-50 hover:bg-pastelPink-100 text-pastelPink-950 border border-pastelPink-200 px-3 py-1 rounded-xl font-bold transition-colors">Flores ➔ ETEC Central</button>
+                        <button onclick="setPreset('Zona Norte', 'Colegio Estadual')" class="bg-pastelYellow-100 hover:bg-pastelYellow-200 text-pastelYellow-950 border border-pastelYellow-300 px-3 py-1 rounded-xl font-bold transition-colors">Zona Norte ➔ Colégio Estadual</button>
+                        <button onclick="setPreset('Terminal Rodoviário', 'Faculdade Integrada')" class="bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-300 px-3 py-1 rounded-xl font-bold transition-colors">Terminal ➔ Faculdade</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Results Section -->
+        <section id="resultados-section" class="py-12 bg-pastelPink-50/30">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <span class="text-xs font-black uppercase tracking-wider text-pastelPink-700 bg-pastelPink-100 px-3 py-1 rounded-lg border border-pastelPink-200">
+                            Resultados da Busca
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-pastelPink-950 mt-1" id="results-heading">
+                            Opções de Trajeto Encontradas
+                        </h2>
+                        <p class="text-sm font-medium text-slate-600" id="results-subheading">
+                            Compare os trajetos calculados com base em rotas públicas e colaborativas.
+                        </p>
+                    </div>
+
+                    <!-- Filter pills -->
+                    <div class="flex flex-wrap gap-2 text-xs sm:text-sm font-bold">
+                        <button onclick="filterResults('all')" id="filter-all" class="px-4 py-2 rounded-xl bg-pastelPink-950 text-white shadow-sm">Todas (4)</button>
+                        <button onclick="filterResults('cheapest')" id="filter-cheapest" class="px-4 py-2 rounded-xl bg-white text-slate-800 hover:bg-pastelYellow-100 border border-pastelYellow-300">🏷️ Mais Econômica</button>
+                        <button onclick="filterResults('fastest')" id="filter-fastest" class="px-4 py-2 rounded-xl bg-white text-slate-800 hover:bg-pastelPink-100 border border-pastelPink-300">⚡ Mais Rápida</button>
+                    </div>
+                </div>
+
+                <!-- Routes Container -->
+                <div id="routes-list" class="space-y-5">
+                    <!-- Dynamic JavaScript Cards Rendered Here -->
+                </div>
+
+                <!-- Route Comparison Drawer / Dynamic View -->
+                <div id="comparison-box" class="mt-8 bg-gradient-to-r from-pastelYellow-100 via-white to-pastelPink-100 p-6 rounded-3xl border-2 border-pastelYellow-300 shadow-md hidden">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-black text-pastelYellow-950 flex items-center gap-2">
+                            <i class="fa-solid fa-code-compare text-pastelPink-600"></i> Comparação Direta de Trajetos
+                        </h3>
+                        <button onclick="closeComparison()" class="text-xs font-bold text-slate-600 hover:underline">Fechar</button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="comparison-content">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Minha Rota para a Escola Section -->
+        <section id="minha-rota" class="py-16 bg-white border-t border-pastelPink-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-10">
+                    <span class="bg-pastelYellow-200 text-pastelYellow-950 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider border border-pastelYellow-300 shadow-sm">
+                        <i class="fa-solid fa-users text-pastelPink-600 mr-1"></i> Participativo & Colaborativo
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-pastelPink-950 mt-3">
+                        Minha Rota para a Escola
+                    </h2>
+                    <p class="text-slate-700 mt-2 text-base sm:text-lg font-medium">
+                        Compartilhe o caminho que você faz diariamente. Os próprios estudantes alimentam o Rota Fácil com informações reais de trajetos, custos e tempo de espera.
+                    </p>
+                </div>
+
+                <!-- Privacy Protection Notice -->
+                <div class="bg-pastelPink-950 text-white p-5 rounded-2xl mb-10 border-2 border-pastelYellow-300 shadow-lg max-w-4xl mx-auto">
+                    <div class="flex items-start gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-pastelYellow-300 text-pastelYellow-950 flex items-center justify-center font-bold text-lg shrink-0">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-extrabold text-pastelYellow-300 text-sm sm:text-base">Garantia de Privacidade & Proteção de Dados</h4>
+                            <p class="text-xs sm:text-sm text-pastelPink-100 mt-1 leading-relaxed">
+                                <strong class="text-white">Nunca mostramos o seu endereço exato.</strong> Exibimos apenas o bairro ou região aproximada. Não coletamos telefone, e-mail ou dados pessoais de contato, e não permitimos mensagens diretas entre usuários menores de idade. A plataforma serve exclusivamente para compartilhamento informativo de mobilidade.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Registration Form -->
+                    <div class="lg:col-span-5 bg-gradient-to-br from-pastelPink-50 via-white to-pastelYellow-50 p-6 sm:p-8 rounded-3xl border-2 border-pastelPink-200 pastel-card-shadow">
+                        <h3 class="text-xl font-black text-pastelPink-950 mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-pen-to-square text-pastelPink-600"></i> Cadastrar Minha Rota
+                        </h3>
+                        <p class="text-xs text-slate-600 mb-6 font-semibold">Ajude colegas que fazem o mesmo caminho!</p>
+
+                        <form id="student-route-form" onsubmit="submitStudentRoute(event)" class="space-y-4">
+                            <div>
+                                <label for="st-nickname" class="block text-xs font-black text-slate-800 uppercase mb-1">Seu Nome ou Apelido</label>
+                                <input type="text" id="st-nickname" required placeholder="Ex: Estudante Lucas" class="w-full p-3 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="st-school" class="block text-xs font-black text-slate-800 uppercase mb-1">Sua Escola / Faculdade</label>
+                                    <input type="text" id="st-school" required placeholder="Ex: ETEC Central" class="w-full p-3 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                                <div>
+                                    <label for="st-neighborhood" class="block text-xs font-black text-slate-800 uppercase mb-1">Bairro de Origem</label>
+                                    <input type="text" id="st-neighborhood" required placeholder="Ex: Bairro São José" class="w-full p-3 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div>
+                                    <label for="st-mode" class="block text-xs font-black text-slate-800 uppercase mb-1">Meios Utilizados</label>
+                                    <select id="st-mode" required class="w-full p-3 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                        <option value="Ônibus + Trem">🚌 Ônibus + 🚆 Trem</option>
+                                        <option value="Ônibus Apenas">🚌 Ônibus Apenas</option>
+                                        <option value="Metrô + Ônibus">🚇 Metrô + 🚌 Ônibus</option>
+                                        <option value="Bicicleta + Trem">🚲 Bike + 🚆 Trem</option>
+                                        <option value="Caminhada + Ônibus">🚶 Caminhada + 🚌 Ônibus</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="st-lines" class="block text-xs font-black text-slate-800 uppercase mb-1">Linhas (se souber)</label>
+                                    <input type="text" id="st-lines" placeholder="Ex: Linha 204 / Linha Rosa" class="w-full p-3 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-3 gap-2">
+                                <div>
+                                    <label for="st-transports" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Nº Transportes</label>
+                                    <input type="number" id="st-transports" min="1" max="5" value="2" required class="w-full p-2.5 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                                <div>
+                                    <label for="st-transfers" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Baldeações</label>
+                                    <input type="number" id="st-transfers" min="0" max="4" value="1" required class="w-full p-2.5 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                                <div>
+                                    <label for="st-cost" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Gasto (R$)</label>
+                                    <input type="number" step="0.10" id="st-cost" value="6.50" required class="w-full p-2.5 rounded-xl border-2 border-pastelYellow-300 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                                <div>
+                                    <label for="st-duration" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Duração (Min)</label>
+                                    <input type="number" id="st-duration" value="50" required class="w-full p-2.5 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                                <div>
+                                    <label for="st-leave-time" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Horário Saída</label>
+                                    <input type="time" id="st-leave-time" value="06:30" required class="w-full p-2.5 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                                <div>
+                                    <label for="st-arrive-time" class="block text-[10px] font-black text-slate-800 uppercase mb-1">Horário Chegada</label>
+                                    <input type="time" id="st-arrive-time" value="07:20" required class="w-full p-2.5 rounded-xl border-2 border-pastelPink-200 text-sm font-bold text-slate-900 bg-white">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-black text-slate-800 uppercase mb-1.5">Como você avalia esta rota?</label>
+                                <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+                                    <label class="inline-flex items-center gap-1.5 bg-white p-2 rounded-xl border border-pastelPink-200 cursor-pointer">
+                                        <input type="checkbox" name="st-tag" value="Econômica" checked class="text-pastelPink-600"> <span>🏷️ Econômica</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 bg-white p-2 rounded-xl border border-pastelPink-200 cursor-pointer">
+                                        <input type="checkbox" name="st-tag" value="Rápida" class="text-pastelPink-600"> <span>⚡ Rápida</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 bg-white p-2 rounded-xl border border-pastelPink-200 cursor-pointer">
+                                        <input type="checkbox" name="st-tag" value="Cansativa" class="text-pastelPink-600"> <span>🥱 Cansativa</span>
+                                    </label>
+                                    <label class="inline-flex items-center gap-1.5 bg-white p-2 rounded-xl border border-pastelPink-200 cursor-pointer">
+                                        <input type="checkbox" name="st-tag" value="Segura" checked class="text-pastelPink-600"> <span>🛡️ Segura</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <button type="submit" class="w-full bg-gradient-to-r from-pastelPink-600 to-pastelYellow-600 hover:from-pastelPink-700 hover:to-pastelYellow-700 text-white font-black py-3.5 rounded-xl shadow-md transition-all text-sm mt-2 border border-pastelPink-300">
+                                Cadastrar Minha Rota
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Comparison Module: "Encontre estudantes com rotas parecidas" -->
+                    <div class="lg:col-span-7 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-black text-pastelPink-950 flex items-center gap-2">
+                                    <i class="fa-solid fa-people-arrows text-pastelYellow-700"></i> Encontre estudantes com rotas parecidas
+                                </h3>
+                                <span class="text-xs font-bold text-slate-700 bg-pastelYellow-200 px-3 py-1 rounded-full border border-pastelYellow-300">Comparador Anônimo</span>
+                            </div>
+                            <p class="text-xs text-slate-600 font-medium mb-4">
+                                Veja como outros alunos da sua região chegam até a escola e descubra caminhos alternativos que gastam menos ou economizam tempo.
+                            </p>
+
+                            <!-- Comparison Cards Container -->
+                            <div id="student-routes-comparison" class="space-y-4">
+                                <!-- JS Populated Cards -->
+                            </div>
+                        </div>
+
+                        <div class="mt-6 bg-pastelYellow-100/80 p-4 rounded-2xl border border-pastelYellow-300 text-xs text-pastelYellow-950 font-bold flex items-center gap-3">
+                            <i class="fa-solid fa-lightbulb text-xl text-pastelYellow-700 shrink-0"></i>
+                            <span>Você notou uma rota mais rápida? Teste o trajeto de um colega e compartilhe sua experiência com a comunidade!</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Rotas Compartilhadas Feed Section -->
+        <section id="rotas-compartilhadas" class="py-16 bg-pastelPink-50/50 border-t border-pastelPink-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                    <div>
+                        <span class="bg-pastelPink-200 text-pastelPink-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider border border-pastelPink-300">
+                            Mural da Comunidade
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-black text-pastelPink-950 mt-1">
+                            Rotas Compartilhadas
+                        </h2>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="shared-filter-input" oninput="filterSharedRoutes()" placeholder="Filtrar por bairro ou escola..." class="p-2.5 px-4 rounded-xl border-2 border-pastelPink-200 text-xs font-bold bg-white text-slate-800">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="shared-routes-grid">
+                    <!-- Populated dynamically via JavaScript -->
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Economize na Rota Section -->
+        <section id="economize" class="py-16 bg-white border-t border-pastelPink-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-12">
+                    <span class="bg-pastelYellow-200 text-pastelYellow-950 text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider border border-pastelYellow-300 shadow-sm">
+                        <i class="fa-solid fa-piggy-bank text-pastelYellow-700 mr-1"></i> Estratégias Práticas
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black text-pastelPink-950 mt-3">
+                        Economize na Rota
+                    </h2>
+                    <p class="text-slate-700 mt-2 text-base sm:text-lg font-medium">
+                        Ideias inteligentes para reduzir os seus custos diários de mobilidade, mesmo que o trajeto leve alguns minutos adicionais.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Strategy 1 -->
+                    <div class="bg-pastelPink-50/70 p-7 rounded-3xl border-2 border-pastelPink-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-pastelPink-200 text-pastelPink-800 flex items-center justify-center font-bold text-xl mb-4 border border-pastelPink-300">
+                                <i class="fa-solid fa-shoe-prints"></i>
+                            </div>
+                            <h3 class="text-lg font-black text-pastelPink-950 mb-2">Caminhada entre Estações Próximas</h3>
+                            <p class="text-xs text-slate-700 font-medium leading-relaxed mb-4">
+                                Caminhar de 8 a 12 minutos para pegar o transporte em uma estação vizinha pode evitar uma transição tarifária, economizando até R$ 5,00 por dia.
+                            </p>
+                        </div>
+                        <span class="text-[11px] font-black text-pastelPink-800 bg-pastelPink-100 px-3 py-1.5 rounded-xl border border-pastelPink-200 inline-block">
+                            💡 Economia estimada: R$ 100,00/mês
+                        </span>
+                    </div>
+
+                    <!-- Strategy 2 -->
+                    <div class="bg-pastelYellow-50/80 p-7 rounded-3xl border-2 border-pastelYellow-300 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-pastelYellow-200 text-pastelYellow-900 flex items-center justify-center font-bold text-xl mb-4 border border-pastelYellow-400">
+                                <i class="fa-solid fa-bicycle"></i>
+                            </div>
+                            <h3 class="text-lg font-black text-pastelYellow-950 mb-2">Combinação Bike + Transporte Coletivo</h3>
+                            <p class="text-xs text-slate-700 font-medium leading-relaxed mb-4">
+                                Use a bicicleta para o trecho inicial do seu bairro até o terminal de trem ou metrô. Você elimina o primeiro ônibus do trajeto de ida e volta.
+                            </p>
+                        </div>
+                        <span class="text-[11px] font-black text-pastelYellow-950 bg-pastelYellow-200 px-3 py-1.5 rounded-xl border border-pastelYellow-300 inline-block">
+                            💡 Economia estimada: R$ 120,00/mês
+                        </span>
+                    </div>
+
+                    <!-- Strategy 3 -->
+                    <div class="bg-pastelPink-50/70 p-7 rounded-3xl border-2 border-pastelPink-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 rounded-2xl bg-pastelPink-200 text-pastelPink-800 flex items-center justify-center font-bold text-xl mb-4 border border-pastelPink-300">
+                                <i class="fa-solid fa-clock flex-shrink-0"></i>
+                            </div>
+                            <h3 class="text-lg font-black text-pastelPink-950 mb-2">Aproveitamento do Tempo de Transbordo</h3>
+                            <p class="text-xs text-slate-700 font-medium leading-relaxed mb-4">
+                                Planeje suas trocas dentro da janela de integração tarifária do cartão municipal. Realize até 3 embarques pagando a menor tarifa acumulada.
+                            </p>
+                        </div>
+                        <span class="text-[11px] font-black text-pastelPink-800 bg-pastelPink-100 px-3 py-1.5 rounded-xl border border-pastelPink-200 inline-block">
+                            💡 Evita tarifas duplicadas
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Dicas de Mobilidade & Avaliação Section -->
+        <section id="dicas" class="py-16 bg-gradient-to-b from-white to-pastelYellow-50/60 border-t border-pastelPink-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    
+                    <!-- Tips Column -->
+                    <div class="space-y-6">
+                        <div>
+                            <span class="bg-pastelPink-200 text-pastelPink-950 text-xs font-black px-3.5 py-1 rounded-full uppercase tracking-wider border border-pastelPink-300">
+                                Guias Práticos
+                            </span>
+                            <h2 class="text-3xl font-black text-pastelPink-950 mt-2">Dicas de Mobilidade</h2>
+                            <p class="text-slate-600 text-sm font-medium mt-1">Recomendações essenciais para organizar sua rotina diária.</p>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div class="p-4 rounded-2xl bg-white border-2 border-pastelPink-200 shadow-sm flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-pastelPink-100 text-pastelPink-800 flex items-center justify-center font-bold shrink-0">1</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Compare caminhos antes de sair de casa</h4>
+                                    <p class="text-xs text-slate-600 mt-0.5">Um trajeto alternativo pode evitar um trecho congestionado nas horas de pico.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white border-2 border-pastelYellow-300 shadow-sm flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-pastelYellow-200 text-pastelYellow-950 flex items-center justify-center font-bold shrink-0">2</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Verifique a estimativa de tempo de espera</h4>
+                                    <p class="text-xs text-slate-600 mt-0.5">Chegar ao ponto alguns minutos antes reduz a exposição a locais isolados.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white border-2 border-pastelPink-200 shadow-sm flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-pastelPink-100 text-pastelPink-800 flex items-center justify-center font-bold shrink-0">3</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Combine diferentes transportes</h4>
+                                    <p class="text-xs text-slate-600 mt-0.5">Não limite suas escolhas apenas ao ônibus. O uso de trilhos ou caminhada rápida encurta caminhos.</p>
+                                </div>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-white border-2 border-pastelYellow-300 shadow-sm flex items-start gap-3.5">
+                                <div class="w-9 h-9 rounded-xl bg-pastelYellow-200 text-pastelYellow-950 flex items-center justify-center font-bold shrink-0">4</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Escolha pontos movimentados e iluminados</h4>
+                                    <p class="text-xs text-slate-600 mt-0.5">Dê preferência a paradas em avenidas principais quando estiver viajando à noite.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation & Feedback Box -->
+                    <div class="bg-gradient-to-br from-pastelPink-950 via-pastelPink-900 to-slate-900 text-white p-7 sm:p-9 rounded-3xl border-2 border-pastelYellow-300 shadow-xl">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-12 h-12 rounded-2xl bg-pastelYellow-300 text-pastelYellow-950 flex items-center justify-center text-xl font-bold">
+                                <i class="fa-solid fa-star-half-stroke"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-white">Avaliação das Rotas</h3>
+                                <p class="text-xs text-pastelPink-200 font-medium">Relatos e condições enviadas pela comunidade</p>
+                            </div>
+                        </div>
+
+                        <p class="text-xs text-slate-300 mb-6 leading-relaxed">
+                            Passou por algum imprevisto no seu trajeto hoje? Avalie sua rota e avise outros estudantes sobre lotação, atrasos ou alterações nas viagens.
+                        </p>
+
+                        <button onclick="openEvaluationModal()" class="w-full bg-pastelYellow-300 hover:bg-pastelYellow-400 text-pastelYellow-950 font-black py-4 px-6 rounded-2xl shadow-md transition-all text-sm flex items-center justify-center gap-2 border border-pastelYellow-400">
+                            <i class="fa-solid fa-comment-dots"></i>
+                            <span>Avaliar Condições da Minha Rota Hoje</span>
+                        </button>
+
+                        <!-- Recent Feedback Feed Preview -->
+                        <div class="mt-6 pt-5 border-t border-pastelPink-800 space-y-3">
+                            <span class="text-[10px] uppercase tracking-wider font-extrabold text-pastelYellow-300 block">Últimas Avaliações da Comunidade:</span>
+                            <div class="bg-pastelPink-900/80 p-3 rounded-xl border border-pastelPink-800 text-xs">
+                                <div class="flex justify-between items-center text-pastelPink-200 font-bold mb-1">
+                                    <span>🚌 Linha 204 - Terminal Central</span>
+                                    <span class="text-amber-300">⚠️ Lotação Alta</span>
+                                </div>
+                                <p class="text-slate-300 text-[11px]">"Ônibus passou muito cheio às 07:15, mas seguiu horário normal."</p>
+                            </div>
+                            <div class="bg-pastelPink-900/80 p-3 rounded-xl border border-pastelPink-800 text-xs">
+                                <div class="flex justify-between items-center text-pastelPink-200 font-bold mb-1">
+                                    <span>🚆 Trem Linha Rosa</span>
+                                    <span class="text-emerald-300">✅ Funcionando Normalmente</span>
+                                </div>
+                                <p class="text-slate-300 text-[11px]">"Viagem tranquila e dentro do tempo previsto."</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Sobre o Projeto Section -->
+        <section id="sobre" class="py-16 bg-white border-t border-pastelPink-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-r from-pastelPink-100 via-white to-pastelYellow-100 p-8 sm:p-12 rounded-3xl border-2 border-pastelPink-200 pastel-card-shadow">
+                    <div class="max-w-3xl mx-auto text-center space-y-4">
+                        <span class="bg-pastelPink-600 text-white text-xs font-black px-4 py-1.5 rounded-full uppercase tracking-wider">
+                            Projeto de Vida
+                        </span>
+                        <h2 class="text-3xl sm:text-4xl font-black text-pastelPink-950">
+                            Sobre o Rota Fácil
+                        </h2>
+                        <p class="text-slate-700 text-sm sm:text-base leading-relaxed font-medium">
+                            O <strong>Rota Fácil</strong> nasceu como uma iniciativa voltada para enfrentar desafios reais de mobilidade urbana enfrentados diariamente por estudantes e trabalhadores: o alto custo das passagens, o tempo excessivo de viagem, a quantidade desnecessária de baldeações e a falta de informações claras para comparar trajetos.
+                        </p>
+                        <p class="text-slate-700 text-sm sm:text-base leading-relaxed font-medium">
+                            Construída de forma <strong class="text-pastelPink-800">independente</strong>, a plataforma não depende de repasses governamentais ou sistemas corporativos de pagamento. Ela combina informações públicas com a colaboração ativa dos próprios usuários para criar uma rede útil, segura e acessível a todos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Important Disclaimer Banner -->
+        <div class="bg-pastelYellow-100 border-y border-pastelYellow-300 py-4 px-4 text-center text-xs font-bold text-pastelYellow-950">
+            <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
+                <i class="fa-solid fa-triangle-exclamation text-amber-700 text-sm"></i>
+                <span>Aviso Importante: Tarifas, horários e rotas do transporte público podem sofrer alterações pelas empresas operadoras sem aviso prévio. Consulte sempre os canais oficiais do município.</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- Evaluation Modal -->
+    <div id="eval-modal" class="fixed inset-0 bg-pastelPink-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border-2 border-pastelPink-200 relative">
+            <button onclick="closeEvaluationModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-pastelPink-100 text-pastelPink-950 font-bold hover:bg-pastelPink-200 flex items-center justify-center" aria-label="Fechar modal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <h3 class="text-xl font-black text-pastelPink-950 mb-1 flex items-center gap-2">
+                <i class="fa-solid fa-bullhorn text-pastelYellow-700"></i> Avaliar Sua Rota Hoje
+            </h3>
+            <p class="text-xs text-slate-600 mb-4 font-semibold">Como foi sua experiência no transporte hoje?</p>
+
+            <form onsubmit="submitEvaluation(event)" class="space-y-4 text-xs font-bold text-slate-800">
+                <div>
+                    <label for="eval-route-select" class="block mb-1 uppercase">Linha / Trajeto</label>
+                    <select id="eval-route-select" required class="w-full p-3 rounded-xl border-2 border-pastelPink-200 bg-white font-bold text-slate-900">
+                        <option value="Ônibus Linha 102 - Central">🚌 Ônibus Linha 102 - Central</option>
+                        <option value="Trem Linha Rosa">🚆 Trem Linha Rosa</option>
+                        <option value="Metrô Linha Amarela">🚇 Metrô Linha Amarela</option>
+                        <option value="Outro Trajeto">Outro Trajeto</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block mb-1 uppercase">Como estava a lotação?</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="border-2 border-pastelPink-200 p-2 rounded-xl text-center cursor-pointer hover:bg-pastelPink-50">
+                            <input type="radio" name="crowd-status" value="Tranquilo" checked class="mb-1 text-pastelPink-600"> 🟢 Tranquilo
+                        </label>
+                        <label class="border-2 border-pastelPink-200 p-2 rounded-xl text-center cursor-pointer hover:bg-pastelPink-50">
+                            <input type="radio" name="crowd-status" value="Moderado" class="mb-1 text-pastelPink-600"> 🟡 Moderado
+                        </label>
+                        <label class="border-2 border-pastelPink-200 p-2 rounded-xl text-center cursor-pointer hover:bg-pastelPink-50">
+                            <input type="radio" name="crowd-status" value="Lotado" class="mb-1 text-pastelPink-600"> 🔴 Lotado
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block mb-1 uppercase">Como foi o tempo de espera?</label>
+                    <select id="eval-wait-time" class="w-full p-3 rounded-xl border-2 border-pastelPink-200 bg-white font-bold text-slate-900">
+                        <option value="Sem atraso / Rápido">Sem atraso / Rápido</option>
+                        <option value="Muita espera (mais de 15 min de atraso)">Muita espera (mais de 15 min de atraso)</option>
+                        <option value="Atraso moderado">Atraso moderado</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="eval-comment" class="block mb-1 uppercase">Comentário Adicional</label>
+                    <textarea id="eval-comment" rows="2" placeholder="Ex: Viagem cansativa, mas no horário..." class="w-full p-3 rounded-xl border-2 border-pastelPink-200 font-medium text-slate-900"></textarea>
+                </div>
+
+                <button type="submit" class="w-full bg-pastelPink-600 hover:bg-pastelPink-700 text-white font-black py-3.5 rounded-xl shadow-md transition-all">
+                    Enviar Avaliação
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 right-5 bg-pastelPink-950 text-white px-6 py-4 rounded-2xl shadow-2xl border-2 border-pastelYellow-300 flex items-center gap-3 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+        <i class="fa-solid fa-circle-check text-pastelYellow-300 text-xl"></i>
+        <span id="toast-message" class="text-sm font-bold">Ação concluída com sucesso!</span>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-pastelPink-950 text-pastelPink-200 py-12 border-t border-pastelPink-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="md:col-span-2">
+                    <div class="flex items-center gap-2.5 mb-3">
+                        <div class="w-9 h-9 bg-gradient-to-tr from-pastelPink-400 to-pastelYellow-300 rounded-xl flex items-center justify-center text-pastelPink-950 font-extrabold">
+                            <i class="fa-solid fa-diamond-turn-right text-lg"></i>
+                        </div>
+                        <span class="text-2xl font-black text-white">Rota Fácil</span>
+                    </div>
+                    <p class="text-xs text-pastelPink-200/80 leading-relaxed max-w-sm font-medium">
+                        Plataforma comunitária e independente projetada para tornar o transporte urbano mais acessível, transparente e colaborativo para estudantes e trabalhadores.
+                    </p>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-black text-sm mb-3">Links do Site</h4>
+                    <ul class="space-y-2 text-xs font-semibold">
+                        <li><a href="#hero" class="hover:text-pastelYellow-300">Buscar Rota</a></li>
+                        <li><a href="#minha-rota" class="hover:text-pastelYellow-300">Minha Rota para a Escola</a></li>
+                        <li><a href="#rotas-compartilhadas" class="hover:text-pastelYellow-300">Rotas Compartilhadas</a></li>
+                        <li><a href="#economize" class="hover:text-pastelYellow-300">Economize na Rota</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-black text-sm mb-3">Acessibilidade</h4>
+                    <ul class="space-y-2 text-xs font-semibold">
+                        <li><button onclick="toggleHighContrast()" class="hover:text-pastelYellow-300 text-left">Alto Contraste</button></li>
+                        <li><button onclick="changeFontSize(1)" class="hover:text-pastelYellow-300 text-left">Aumentar Texto</button></li>
+                        <li><button onclick="readPageSummary()" class="hover:text-pastelYellow-300 text-left">Ouvir Resumo do Site</button></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-pastelPink-900 text-center text-xs text-pastelPink-300 font-medium">
+                <p>© 2026 Rota Fácil — Mobilidade Urbana Colaborativa & Independente. Dados simulados para protótipo.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initial Mock Search Routes
+        const initialSearchRoutes = [
+            {
+                id: 101,
+                name: "Integração Bairro-Escola (Ônibus + Trem)",
+                modes: ["bus", "train"],
+                modeLabels: "🚌 Ônibus + 🚆 Trem",
+                price: "R$ 6,50",
+                rawPrice: 6.50,
+                duration: "45 min",
+                rawTime: 45,
+                transportsCount: 2,
+                transfersCount: 1,
+                waitTime: "6 min",
+                distance: "12,4 km",
+                isCheapest: true,
+                isFastest: false,
+                ratingText: "Rápida e Acessível",
+                badge: "Opção Mais Econômica"
+            },
+            {
+                id: 102,
+                name: "Linha Expressa de Metrô Direto",
+                modes: ["metro"],
+                modeLabels: "🚇 Metrô Direto",
+                price: "R$ 8,20",
+                rawPrice: 8.20,
+                duration: "28 min",
+                rawTime: 28,
+                transportsCount: 1,
+                transfersCount: 0,
+                waitTime: "3 min",
+                distance: "10,1 km",
+                isCheapest: false,
+                isFastest: true,
+                ratingText: "Sem Trânsito na Cidade",
+                badge: "Opção Mais Rápida"
+            },
+            {
+                id: 103,
+                name: "Caminhada até Estação + Trem",
+                modes: ["walk", "train"],
+                modeLabels: "🚶 Caminhada (10m) + 🚆 Trem",
+                price: "R$ 4,40",
+                rawPrice: 4.40,
+                duration: "52 min",
+                rawTime: 52,
+                transportsCount: 1,
+                transfersCount: 0,
+                waitTime: "5 min",
+                distance: "9,8 km",
+                isCheapest: true,
+                isFastest: false,
+                ratingText: "Máxima Economia Diária",
+                badge: "Economia Inteligente"
+            },
+            {
+                id: 104,
+                name: "Ciclofaixa + Ônibus de Bairro",
+                modes: ["bike", "bus"],
+                modeLabels: "🚲 Bike + 🚌 Ônibus",
+                price: "R$ 5,00",
+                rawPrice: 5.00,
+                duration: "40 min",
+                rawTime: 40,
+                transportsCount: 2,
+                transfersCount: 1,
+                waitTime: "8 min",
+                distance: "11,0 km",
+                isCheapest: false,
+                isFastest: false,
+                ratingText: "Exercício + Mobilidade",
+                badge: "Eco Amigável"
+            }
+        ];
+
+        // Anonymized Student Shared Routes Database ("Minha Rota para a Escola")
+        let studentSharedRoutes = [
+            {
+                id: "st-1",
+                nickname: "Estudante A",
+                school: "Colegio Estadual Parque",
+                originRegion: "Zona Norte",
+                modes: "🚌 Ônibus + 🚆 Trem",
+                lines: "Linha 204 + Linha Amarela",
+                transportsCount: 2,
+                transfersCount: 1,
+                duration: "55 min",
+                cost: "R$ 8,60",
+                leaveTime: "06:20",
+                arriveTime: "07:15",
+                tags: ["Econômica", "Segura"]
+            },
+            {
+                id: "st-2",
+                nickname: "Estudante B",
+                school: "Colegio Estadual Parque",
+                originRegion: "Região Próxima",
+                modes: "🚌 Ônibus Direto",
+                lines: "Linha 102 Bairro",
+                transportsCount: 1,
+                transfersCount: 0,
+                duration: "65 min",
+                cost: "R$ 6,00",
+                leaveTime: "06:10",
+                arriveTime: "07:15",
+                tags: ["Demorada", "Econômica"]
+            },
+            {
+                id: "st-3",
+                nickname: "Estudante C",
+                school: "ETEC Central",
+                originRegion: "Bairro das Flores",
+                modes: "🚲 Bike + 🚇 Metrô",
+                lines: "Ciclofaixa Rota 1",
+                transportsCount: 2,
+                transfersCount: 1,
+                duration: "38 min",
+                cost: "R$ 4,40",
+                leaveTime: "06:40",
+                arriveTime: "07:18",
+                tags: ["Rápida", "Econômica"]
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        // Render Search Results
+        function renderSearchRoutes() {
+            const container = document.getElementById('routes-list');
+            container.innerHTML = '';
+
+            let filtered = initialSearchRoutes.filter(r => {
+                if (currentFilter === 'cheapest') return r.isCheapest;
+                if (currentFilter === 'fastest') return r.isFastest;
+                return true;
+            });
+
+            filtered.forEach(route => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-3xl p-5 sm:p-7 border-2 border-pastelPink-200 pastel-card-shadow hover:shadow-md transition-all";
+
+                let badges = '';
+                if (route.isCheapest) {
+                    badges += `<span class="bg-pastelYellow-200 text-pastelYellow-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mr-2 border border-pastelYellow-300">🏷️ Mais Econômica</span>`;
+                }
+                if (route.isFastest) {
+                    badges += `<span class="bg-pastelPink-200 text-pastelPink-950 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mr-2 border border-pastelPink-300">⚡ Mais Rápida</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+                        <div class="space-y-3 flex-grow">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                ${badges}
+                                <span class="text-xs font-extrabold text-slate-700 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">${route.badge}</span>
+                            </div>
+
+                            <h3 class="text-xl font-black text-pastelPink-950">${route.name}</h3>
+
+                            <div class="text-xs font-bold text-slate-800 flex items-center gap-2 bg-pastelPink-50 px-3.5 py-2 rounded-xl border border-pastelPink-200 inline-block">
+                                <i class="fa-solid fa-route text-pastelPink-600"></i>
+                                <span>Modalidades: ${route.modeLabels}</span>
+                            </div>
+                        </div>
+
+                        <!-- Grid of details requested by user -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 bg-pastelYellow-50/80 p-4 rounded-2xl border border-pastelYellow-300 text-center shrink-0 text-xs">
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Valor Aprox.</span>
+                                <span class="text-base font-black text-pastelPink-700">${route.price}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Tempo Estimado</span>
+                                <span class="text-sm font-extrabold text-slate-900">${route.duration}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Transportes</span>
+                                <span class="text-sm font-extrabold text-slate-900">${route.transportsCount} meio(s)</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Baldeações</span>
+                                <span class="text-sm font-extrabold text-slate-900">${route.transfersCount === 0 ? 'Direto' : route.transfersCount}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Espera Prevista</span>
+                                <span class="text-sm font-extrabold text-slate-900">${route.waitTime}</span>
+                            </div>
+                            <div>
+                                <span class="text-[10px] font-black text-slate-600 uppercase block">Distância</span>
+                                <span class="text-sm font-extrabold text-slate-900">${route.distance}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-pastelPink-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+                        <span class="text-slate-700 font-bold">
+                            <i class="fa-solid fa-circle-info text-pastelPink-600 mr-1"></i> Característica: ${route.ratingText}
+                        </span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="compareRoute(${route.id})" class="bg-pastelYellow-200 hover:bg-pastelYellow-300 text-pastelYellow-950 font-bold px-3 py-1.5 rounded-xl border border-pastelYellow-300 transition-colors">
+                                Comparar
+                            </button>
+                            <button onclick="selectRoute('${route.name}')" class="bg-pastelPink-600 hover:bg-pastelPink-700 text-white font-extrabold px-4 py-1.5 rounded-xl transition-all shadow-sm">
+                                Escolher Trajeto
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        // Render Student Shared Routes Comparison ("Encontre estudantes com rotas parecidas")
+        function renderStudentSharedRoutes() {
+            const comparisonContainer = document.getElementById('student-routes-comparison');
+            const sharedGrid = document.getElementById('shared-routes-grid');
+
+            if (comparisonContainer) {
+                comparisonContainer.innerHTML = '';
+                studentSharedRoutes.slice(0, 3).forEach(st => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-4 sm:p-5 rounded-2xl border-2 border-pastelPink-200 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4";
+
+                    card.innerHTML = `
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2">
+                                <span class="font-black text-pastelPink-950 text-sm">📍 ${st.nickname} (${st.originRegion} ➔ ${st.school})</span>
+                            </div>
+                            <p class="text-xs text-slate-700 font-semibold">${st.modes} • Linhas: ${st.lines}</p>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                ${st.tags.map(t => `<span class="text-[10px] font-extrabold bg-pastelYellow-100 text-pastelYellow-950 px-2 py-0.5 rounded-md border border-pastelYellow-300">${t}</span>`).join('')}
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 text-xs font-extrabold text-slate-800 bg-pastelPink-50 p-3 rounded-xl border border-pastelPink-200 shrink-0">
+                            <div>
+                                <span class="text-[9px] text-slate-500 uppercase block">Custo</span>
+                                <span class="text-pastelPink-700 font-black">${st.cost}</span>
+                            </div>
+                            <div>
+                                <span class="text-[9px] text-slate-500 uppercase block">Duração</span>
+                                <span>${st.duration}</span>
+                            </div>
+                            <div>
+                                <span class="text-[9px] text-slate-500 uppercase block">Baldeação</span>
+                                <span>${st.transfersCount}</span>
+                            </div>
+                        </div>
+                    `;
+
+                    comparisonContainer.appendChild(card);
+                });
+            }
+
+            if (sharedGrid) {
+                sharedGrid.innerHTML = '';
+                studentSharedRoutes.forEach(st => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-5 rounded-3xl border-2 border-pastelPink-200 shadow-sm flex flex-col justify-between";
+
+                    card.innerHTML = `
+                        <div>
+                            <div class="flex justify-between items-start mb-2">
+                                <span class="font-black text-pastelPink-950 text-sm">${st.nickname}</span>
+                                <span class="text-xs font-black text-pastelPink-700 bg-pastelPink-100 px-2.5 py-0.5 rounded-lg border border-pastelPink-200">${st.cost}</span>
+                            </div>
+                            <p class="text-xs font-bold text-slate-700 mb-1">Escola: ${st.school}</p>
+                            <p class="text-xs font-medium text-slate-600 mb-3">Origem: Bairro/Região ${st.originRegion}</p>
+
+                            <div class="bg-pastelYellow-50/70 p-3 rounded-2xl border border-pastelYellow-300 text-xs font-semibold space-y-1 mb-3">
+                                <p><strong>Meio:</strong> ${st.modes}</p>
+                                <p><strong>Linhas:</strong> ${st.lines}</p>
+                                <p><strong>Saída/Chegada:</strong> ${st.leaveTime} ➔ ${st.arriveTime}</p>
+                                <p><strong>Duração / Baldeações:</strong> ${st.duration} • ${st.transfersCount} baldeação(ões)</p>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-1">
+                            ${st.tags.map(t => `<span class="text-[10px] font-extrabold bg-pastelPink-100 text-pastelPink-950 px-2 py-0.5 rounded-md">${t}</span>`).join('')}
+                        </div>
+                    `;
+                    sharedGrid.appendChild(card);
+                });
+            }
+        }
+
+        function filterResults(type) {
+            currentFilter = type;
+            document.getElementById('filter-all').className = "px-4 py-2 rounded-xl bg-white text-slate-800 border border-slate-300";
+            document.getElementById('filter-cheapest').className = "px-4 py-2 rounded-xl bg-white text-slate-800 border border-pastelYellow-300";
+            document.getElementById('filter-fastest').className = "px-4 py-2 rounded-xl bg-white text-slate-800 border border-pastelPink-300";
+
+            if (type === 'all') document.getElementById('filter-all').className = "px-4 py-2 rounded-xl bg-pastelPink-950 text-white shadow-sm font-bold";
+            if (type === 'cheapest') document.getElementById('filter-cheapest').className = "px-4 py-2 rounded-xl bg-pastelYellow-300 text-pastelYellow-950 font-black border border-pastelYellow-400";
+            if (type === 'fastest') document.getElementById('filter-fastest').className = "px-4 py-2 rounded-xl bg-pastelPink-600 text-white font-black";
+
+            renderSearchRoutes();
+        }
+
+        function executeRouteSearch(e) {
+            e.preventDefault();
+            const origin = document.getElementById('origin-input').value;
+            const dest = document.getElementById('dest-input').value;
+
+            document.getElementById('results-heading').textContent = `Rotas de "${origin}" para "${dest}"`;
+            document.getElementById('results-subheading').textContent = `Calculado com base nas opções de transporte público, bike e caminhada disponíveis.`;
+
+            renderSearchRoutes();
+            showToast("Busca de rotas executada!");
+            document.getElementById('resultados-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setPreset(origin, dest) {
+            document.getElementById('origin-input').value = origin;
+            document.getElementById('dest-input').value = dest;
+            document.getElementById('search-form').dispatchEvent(new Event('submit'));
+        }
+
+        function submitStudentRoute(e) {
+            e.preventDefault();
+            const nickname = document.getElementById('st-nickname').value;
+            const school = document.getElementById('st-school').value;
+            const neighborhood = document.getElementById('st-neighborhood').value;
+            const mode = document.getElementById('st-mode').value;
+            const lines = document.getElementById('st-lines').value || "Não especificado";
+            const transports = document.getElementById('st-transports').value;
+            const transfers = document.getElementById('st-transfers').value;
+            const cost = parseFloat(document.getElementById('st-cost').value || 0).toFixed(2);
+            const duration = document.getElementById('st-duration').value;
+            const leaveTime = document.getElementById('st-leave-time').value;
+            const arriveTime = document.getElementById('st-arrive-time').value;
+
+            const selectedTags = [];
+            document.querySelectorAll('input[name="st-tag"]:checked').forEach(cb => selectedTags.push(cb.value));
+
+            const newRoute = {
+                id: "st-" + (studentSharedRoutes.length + 1),
+                nickname: nickname,
+                school: school,
+                originRegion: neighborhood,
+                modes: mode,
+                lines: lines,
+                transportsCount: parseInt(transports),
+                transfersCount: parseInt(transfers),
+                duration: duration + " min",
+                cost: "R$ " + cost.replace('.', ','),
+                leaveTime: leaveTime,
+                arriveTime: arriveTime,
+                tags: selectedTags.length > 0 ? selectedTags : ["Cadastrada"]
+            };
+
+            studentSharedRoutes.unshift(newRoute);
+            renderStudentSharedRoutes();
+
+            showToast("Sua rota escolar foi cadastrada com sucesso!");
+            document.getElementById('student-route-form').reset();
+            document.getElementById('rotas-compartilhadas').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function filterSharedRoutes() {
+            const query = document.getElementById('shared-filter-input').value.toLowerCase();
+            const cards = document.querySelectorAll('#shared-routes-grid > div');
+            cards.forEach(c => {
+                const text = c.textContent.toLowerCase();
+                if (text.includes(query)) c.style.display = 'flex';
+                else c.style.display = 'none';
+            });
+        }
+
+        function compareRoute(routeId) {
+            const route = initialSearchRoutes.find(r => r.id === routeId);
+            const cheapestRoute = initialSearchRoutes.reduce((prev, curr) => prev.rawPrice < curr.rawPrice ? prev : curr);
+
+            const box = document.getElementById('comparison-box');
+            const content = document.getElementById('comparison-content');
+
+            content.innerHTML = `
+                <div class="bg-white p-4 rounded-2xl border-2 border-pastelPink-200">
+                    <span class="text-xs font-black text-pastelPink-700 uppercase">Rota Selecionada</span>
+                    <h4 class="font-black text-slate-900 text-base mt-1">${route.name}</h4>
+                    <p class="text-xs text-slate-600 mt-1">Custo: <strong>${route.price}</strong> • Tempo: <strong>${route.duration}</strong></p>
+                    <p class="text-xs text-slate-600">Baldeações: <strong>${route.transfersCount}</strong></p>
+                </div>
+
+                <div class="bg-white p-4 rounded-2xl border-2 border-pastelYellow-300">
+                    <span class="text-xs font-black text-pastelYellow-800 uppercase">Referência Mais Econômica</span>
+                    <h4 class="font-black text-slate-900 text-base mt-1">${cheapestRoute.name}</h4>
+                    <p class="text-xs text-slate-600 mt-1">Custo: <strong>${cheapestRoute.price}</strong> • Tempo: <strong>${cheapestRoute.duration}</strong></p>
+                    <p class="text-xs text-slate-600">Baldeações: <strong>${cheapestRoute.transfersCount}</strong></p>
+                </div>
+            `;
+
+            box.classList.remove('hidden');
+            box.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeComparison() {
+            document.getElementById('comparison-box').classList.add('hidden');
+        }
+
+        function selectRoute(name) {
+            showToast(`Trajeto "${name}" selecionado!`);
+        }
+
+        function openEvaluationModal() {
+            document.getElementById('eval-modal').classList.remove('hidden');
+        }
+
+        function closeEvaluationModal() {
+            document.getElementById('eval-modal').classList.add('hidden');
+        }
+
+        function submitEvaluation(e) {
+            e.preventDefault();
+            closeEvaluationModal();
+            showToast("Obrigado por avaliar as condições da sua rota!");
+        }
+
+        // Accessibility Functions
+        let currentFontScale = 0;
+        function changeFontSize(delta) {
+            currentFontScale += delta;
+            if (currentFontScale < -1) currentFontScale = -1;
+            if (currentFontScale > 3) currentFontScale = 3;
+
+            const root = document.documentElement;
+            if (currentFontScale === 0) root.style.fontSize = '16px';
+            else if (currentFontScale === 1) root.style.fontSize = '18px';
+            else if (currentFontScale === 2) root.style.fontSize = '20px';
+            else if (currentFontScale === 3) root.style.fontSize = '22px';
+            else if (currentFontScale === -1) root.style.fontSize = '14px';
+
+            showToast("Tamanho do texto alterado");
+        }
+
+        function resetFontSize() {
+            currentFontScale = 0;
+            document.documentElement.style.fontSize = '16px';
+            showToast("Tamanho do texto restaurado");
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            const isContrast = document.body.classList.contains('high-contrast');
+            showToast(isContrast ? "Alto Contraste Ativado" : "Alto Contraste Desativado");
+        }
+
+        function readPageSummary() {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const text = "Bem-vindo ao Rota Fácil. Encontre o melhor caminho para o seu destino. Plataforma independente para comparar ônibus, trem, metrô, bicicleta e caminhada de forma acessível e transparente.";
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'pt-BR';
+                window.speechSynthesis.speak(utterance);
+                showToast("Lendo resumo em voz alta...");
+            } else {
+                showToast("Síntese de voz não suportada pelo navegador.");
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        window.onload = function() {
+            renderSearchRoutes();
+            renderStudentSharedRoutes();
+        };
+    </script>
+</body>
+</html>
