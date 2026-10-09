@@ -1293,27 +1293,28 @@
             renderSearchRoutes();
             renderStudentSharedRoutes();
         };
- function usarMinhaLocalizacao() {
-  const campoOrigem = document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
-  
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const lat = position.coords.latitude.toFixed(4);
-        const lon = position.coords.longitude.toFixed(4);
-        
-        if (campoOrigem) {
-          campoOrigem.value = `Minha Localização (${lat}, ${lon})`;
-          alert('Localização obtida com sucesso!');
+        function usarMinhaLocalizacao() {
+    const campoOrigem = document.getElementById('origin-input') || document.getElementById('origem') || document.querySelector('input[placeholder*="De onde"]');
+    
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const lat = position.coords.latitude.toFixed(4);
+          const lon = position.coords.longitude.toFixed(4);
+          
+          if (campoOrigem) {
+            campoOrigem.value = `Minha Localização (${lat}, ${lon})`;
+            alert('Localização obtida com sucesso!');
+          }
+        },
+        (error) => {
+          alert('Não foi possível obter sua localização. Verifique se o GPS está ativado.');
         }
-      },
-      (error) => {
-        alert('Não foi possível obter sua localização. Verifique se o GPS está ativado.');
-      }
-    );
-  } else {
-    alert('Geolocalização não é suportada neste navegador.');
+      );
+    } else {
+      alert('Geolocalização não é suportada neste navegador.');
+    }
   }
-} </script> 
+ </script> 
 </body>
 </html> 
